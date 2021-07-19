@@ -11,7 +11,7 @@ import net.runelite.client.input.KeyListener;
 
 class RoofToggleKeyListener implements KeyListener
 {
-    private static final int SET_REMOVE_ROOFS = 3971;
+    private static final int SET_REMOVE_ROOFS = 4577;
 
     @Inject
     private RoofTogglePlugin plugin;
