@@ -2,7 +2,6 @@ package degenereaper.rooftoggle;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
-import net.runelite.client.plugins.rooftoggle.RoofTogglePlugin;
 
 public class RoofTogglePluginTest
 {
