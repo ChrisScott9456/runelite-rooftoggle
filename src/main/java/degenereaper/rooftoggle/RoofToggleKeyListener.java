@@ -26,7 +26,8 @@ class RoofToggleKeyListener implements KeyListener
     private ClientThread clientThread;
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e)
+    {
     }
 
     @Override
@@ -37,7 +38,7 @@ class RoofToggleKeyListener implements KeyListener
         }
 
         // If not currently typing, toggle roof
-        if (!plugin.getCurrentlyTyping()) {
+        if (!plugin.isTyping()) {
             if (config.toggle().matches(e)) {
                 clientThread.invoke(() -> client.runScript(SET_REMOVE_ROOFS));
             }
@@ -48,24 +49,27 @@ class RoofToggleKeyListener implements KeyListener
                 case KeyEvent.VK_ENTER:
                 case KeyEvent.VK_SLASH:
                 case KeyEvent.VK_COLON:
-                    plugin.setCurrentlyTyping(true);
+                    plugin.setTyping(true);
                     break;
             }
-
         } else {
-            // If currently typing, set currentlyTyping to false in the following cases
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                plugin.setCurrentlyTyping(false);
-
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                if (Strings.isNullOrEmpty(client.getVarcStrValue(VarClientStr.CHATBOX_TYPED_TEXT))) {
-                    plugin.setCurrentlyTyping(false);
-                }
-
-            } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                e.consume();
-                plugin.setCurrentlyTyping(false);
-                clientThread.invoke(() -> client.setVarcStrValue(VarClientStr.CHATBOX_TYPED_TEXT, ""));
+            // If typing, set typing to false when using any of the following keys
+            switch (e.getKeyCode())
+            {
+                case KeyEvent.VK_ESCAPE:
+                    e.consume();
+                    plugin.setTyping(false);
+                    break;
+                case KeyEvent.VK_ENTER:
+                    plugin.setTyping(false);
+                    break;
+                case KeyEvent.VK_BACK_SPACE:
+                    // Only lock chat on backspace when the typed text is now empty
+                    if (Strings.isNullOrEmpty(client.getVarcStrValue(VarClientStr.CHATBOX_TYPED_TEXT)))
+                    {
+                        plugin.setTyping(false);
+                    }
+                    break;
             }
         }
     }
